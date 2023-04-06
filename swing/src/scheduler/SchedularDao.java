@@ -198,13 +198,13 @@ public class SchedularDao {
 	}//deleteData
 	
 	//스케줄 입력
-	public boolean addData(SchedularVo vo) {
+	public boolean addData(SchedulerVo vo) {
 		Connection conn = null;
 		PreparedStatement pstmt = null;
 		
 		try {
 			conn = getConnection();
-			String sql = "insert into  table_schedular(day, pno, task, fromTime, toTime, username)"
+			String sql = "insert into  table_scheduler(day, pno, task, fromTime, toTime, username)"
 					+ "					values(?,?,?,?,?,?)";
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1,  vo.getDay());
@@ -226,27 +226,27 @@ public class SchedularDao {
 	}//addData
 	
 	//스케줄 불러오기
-	public List<SchedularVo> searchData(String day, String username){
+	public List<SchedulerVo> searchData(String day, String username){
 		Connection conn = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 
 		try {
 			conn=getConnection();
-			String sql = "select*from  table_schedular"
+			String sql = "select*from  table_scheduler"
 					+ "			where day = ? "
 					+ "			and username = ?";
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, day);
 			pstmt.setString(2,  username);
 			rs = pstmt.executeQuery();
-			List<SchedularVo> list = new ArrayList<>();
+			List<SchedulerVo> list = new ArrayList<>();
 			while(rs.next()) {
 				int pno = rs.getInt("pno");
 				String task = rs.getString("task");
 				String fromTime = rs.getString("fromTime");
 				String toTime = rs.getString("toTime");
-				list.add(new SchedularVo(day, pno, task, fromTime, toTime, username));
+				list.add(new SchedulerVo(day, pno, task, fromTime, toTime, username));
 			}
 			return list;
 		}catch(Exception e) {
@@ -263,7 +263,7 @@ public class SchedularDao {
 		PreparedStatement pstmt = null;
 		try {
 			conn = getConnection();
-			String sql = "delete from  table_schedular"
+			String sql = "delete from  table_scheduler"
 					+ "		where day = ?"
 					+ "		and pno = ?"
 					+ "		and username = ?";
@@ -284,13 +284,13 @@ public class SchedularDao {
 	}//deleteData
 	
 	//스케줄 업데이트
-	public boolean updateData(SchedularVo vo) {
+	public boolean updateData(SchedulerVo vo) {
 		Connection conn = null;
 		PreparedStatement pstmt = null;
 		System.out.println("vo: " + vo);
 		try {
 			conn = getConnection();
-			String sql = "update table_schedular set"
+			String sql = "update table_scheduler set"
 					+ "		task = ?,"
 					+ "		fromTime = ?,"
 					+ "		toTime = ?"
@@ -328,7 +328,7 @@ public class SchedularDao {
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, username);
 			rs = pstmt.executeQuery();
-//			List<SchedularVo> list = new ArrayList<>();
+//			List<SchedulerVo> list = new ArrayList<>();
 			while(rs.next()) {
 				String password = rs.getString("password");
 				String email = rs.getString("email");

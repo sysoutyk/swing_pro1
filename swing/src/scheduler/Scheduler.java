@@ -1,10 +1,11 @@
 package scheduler;
 
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Container;
+import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -14,17 +15,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JButton;
-
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
-
+import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
@@ -66,7 +65,7 @@ public class Scheduler extends JFrame{
 			Insets insets;
 			SchedularDao dao = SchedularDao.getInstance();
 			DefaultTableModel model = new DefaultTableModel();
-			SchedularVo sVo = new SchedularVo();
+			SchedulerVo sVo = new SchedulerVo();
 			
 			//pnlInput
 			String strDay = "";
@@ -86,8 +85,9 @@ public class Scheduler extends JFrame{
 			setUi();
 			inputPanel();
 			setListeners();
-			setResizable(false);
+			setResizable(true);
 			setVisible(true);
+			setLocationRelativeTo(null);
 		}
 		
 		MyListener listeners = new MyListener();
@@ -118,7 +118,7 @@ public class Scheduler extends JFrame{
 				task = tfTask.getText();
 				fromTime = tfFrom.getText();
 				toTime = tfTo.getText();
-				SchedularVo vo = new SchedularVo(strDay, pno, task, fromTime, toTime, username);
+				SchedulerVo vo = new SchedulerVo(strDay, pno, task, fromTime, toTime, username);
 				boolean result = dao.addData(vo);
 				if(result) {
 					JOptionPane.showMessageDialog(con, "입력성공", "알림", JOptionPane.PLAIN_MESSAGE);
@@ -131,7 +131,7 @@ public class Scheduler extends JFrame{
 				task = tfTask.getText();
 				fromTime = tfFrom.getText();
 				toTime = tfTo.getText();
-				SchedularVo vo = new SchedularVo(strDay, pno, task, fromTime, toTime, username);
+				SchedulerVo vo = new SchedulerVo(strDay, pno, task, fromTime, toTime, username);
 				boolean result = dao.updateData(vo);
 				if(result) {
 					JOptionPane.showMessageDialog(con, "수정성공", "알림", JOptionPane.PLAIN_MESSAGE);
@@ -256,6 +256,7 @@ public class Scheduler extends JFrame{
 		}
 		
 		private void setTable() {
+			
 			String[] columnNames = {"day", "priority no", "task", "from", "to"};
 			model.setColumnIdentifiers(columnNames);
 			table.setModel(model);
@@ -278,7 +279,7 @@ public class Scheduler extends JFrame{
 			//row
 			table.setRowHeight(20);
 			TableRowSorter<TableModel> sorter = new TableRowSorter<>(table.getModel());
-			table.setRowSorter(sorter);
+			table.setAutoCreateRowSorter(true);
 			sorter.setSortable(0, false);
 			sorter.setSortable(2, false);
 			sorter.setSortable(3, false);
@@ -287,18 +288,22 @@ public class Scheduler extends JFrame{
 			
 			//pnlShow
 			table.setBackground(Color.WHITE);
-			pnlShow.add(new JScrollPane(table));
+			JScrollPane pane = new JScrollPane(table);
+		    pane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+		    pane.setWheelScrollingEnabled(true);
+		    pane.setPreferredSize(new Dimension(900,300));
 			insets = pnlShow.getInsets();
 			pnlShow.setBounds(insets.left, 180+insets.top, 914, 734);
-			pnlShow.setLayout(new GridLayout());
+			new BorderLayout();
+			pnlShow.add(pane, BorderLayout.CENTER);
 			pnlMain.add(pnlShow);
 			
 		}//showTable
 		
 		public void showData() {
-			List<SchedularVo> lists = dao.searchData(strDay, username);
+			List<SchedulerVo> lists = dao.searchData(strDay, username);
 			model.setRowCount(0);
-			for(SchedularVo v:lists) {
+			for(SchedulerVo v:lists) {
 				String day = v.getDay();
 				int pno = v.getPno();
 				String task = v.getTask();

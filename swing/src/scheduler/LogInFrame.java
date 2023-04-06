@@ -38,6 +38,7 @@ public class LogInFrame extends JFrame{
 		setUi();
 		setResizable(false);
 		setVisible(true);
+		setLocationRelativeTo(null);
 		
 	}
 	class MyListener implements ActionListener{

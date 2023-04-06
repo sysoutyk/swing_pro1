@@ -35,6 +35,7 @@ public class SignUp extends JFrame{
 		setUi();
 		setResizable(false);
 		setVisible(true);
+		setLocationRelativeTo(null);
 	}
 	class MyListener implements ActionListener{
 

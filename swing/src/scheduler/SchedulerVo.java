@@ -1,6 +1,6 @@
 package scheduler;
 
-public class SchedularVo {
+public class SchedulerVo {
 	private String day;
 	private int pno;
 	private String task;
@@ -8,12 +8,12 @@ public class SchedularVo {
 	private String toTime;
 	private String username;
 
-	public SchedularVo() {
+	public SchedulerVo() {
 		super();
 
 	}
 
-	public SchedularVo(String day, int pno, String task, String fromTime, String toTime, String username) {
+	public SchedulerVo(String day, int pno, String task, String fromTime, String toTime, String username) {
 		super();
 		this.day = day;
 		this.pno = pno;
@@ -23,7 +23,7 @@ public class SchedularVo {
 		this.username = username;
 	}
 
-	public SchedularVo(String day, int pno, String task, String fromTime, String toTime) {
+	public SchedulerVo(String day, int pno, String task, String fromTime, String toTime) {
 		super();
 		this.day = day;
 		this.pno = pno;
@@ -47,7 +47,7 @@ public class SchedularVo {
 
 	@Override
 	public String toString() {
-		return "SchedularVo [day=" + day + ", pno=" + pno + ", task=" + task + ", fromTime=" + fromTime + ", toTime="
+		return "SchedulerVo [day=" + day + ", pno=" + pno + ", task=" + task + ", fromTime=" + fromTime + ", toTime="
 				+ toTime + ", username=" + username + "]";
 	}
 

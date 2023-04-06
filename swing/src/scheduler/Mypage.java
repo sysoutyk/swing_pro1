@@ -40,6 +40,7 @@ public class Mypage extends JFrame{
 		setUi();
 		setResizable(false);
 		setVisible(true);
+		setLocationRelativeTo(null);
 	}
 	class MyListener implements ActionListener{
 
