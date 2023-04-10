@@ -7,7 +7,6 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -54,6 +53,7 @@ public class Mypage extends JFrame{
 					if(result == true) {
 						JOptionPane.showMessageDialog(con, "회원탈퇴가 성공적으로 처리되었습니다.", "알림", JOptionPane.PLAIN_MESSAGE);
 						Mypage.this.dispose();
+						new LogInFrame();
 					}
 				}else if(res == JOptionPane.NO_OPTION ) {
 					new Scheduler();
@@ -100,7 +100,7 @@ public class Mypage extends JFrame{
 		JLabel idLabel = new JLabel("username");
 		JLabel pwLabel = new JLabel("password ");
 		JLabel emailLb = new JLabel("email");
-		JLabel tfDateLb = new JLabel("tfDate");
+		JLabel tfDateLb = new JLabel("joindate");
 		
 		//setFont
 		idLabel.setFont(new Font("SansSerif", Font.BOLD,15));

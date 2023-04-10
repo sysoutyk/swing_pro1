@@ -53,7 +53,8 @@ public class LogInFrame extends JFrame{
 					JOptionPane.showMessageDialog(con, "회원님의 정보가 없습니다. 다시 입력해주세요", "알림", 
 							JOptionPane.INFORMATION_MESSAGE);
 				}else {
-					boolean result = dao.dup_id(username);
+					System.out.println("password: " + password);
+					boolean result = dao.chk_login(username, password);
 					System.out.println("result: " + result);
 						if(result) {
 							dao.setUsername(username);
@@ -62,8 +63,12 @@ public class LogInFrame extends JFrame{
 							LogInFrame.this.dispose();
 							new Scheduler();
 						}else{
-							JOptionPane.showMessageDialog(con, "로그인 실패", "알림", 
-							JOptionPane.INFORMATION_MESSAGE);
+							boolean dup_id_result = dao.dup_id(username);
+							if(dup_id_result == true) {
+								JOptionPane.showMessageDialog(con, "비밀번호를 다시 확인해주세요", "알림", JOptionPane.INFORMATION_MESSAGE);
+							}else {
+								JOptionPane.showMessageDialog(con, "아이디를 다시 확인해주세요", "알림", JOptionPane.INFORMATION_MESSAGE);
+							}
 						}
 				}//else
 			}else if(obj == btnSignup) {

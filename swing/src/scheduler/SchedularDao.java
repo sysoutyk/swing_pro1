@@ -93,7 +93,41 @@ public class SchedularDao {
 		}
 		return false;
 	}
-		
+	
+	//로그인 진행
+		public boolean chk_login(String username, String password) {
+			Connection conn = null;
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;
+			System.out.println("password: " + password);
+			try {
+				conn = getConnection();
+				String sql = "select * from table_member"
+						+ "			where username = ?"
+						+ "			and password = ?";
+				pstmt = conn.prepareStatement(sql);
+				pstmt.setString(1, username);
+				pstmt.setString(2, password);
+				rs = pstmt. executeQuery();
+				String db_username="";
+				String db_password="";
+				while(rs.next()) {
+					db_username = rs.getString("username");
+					db_password = rs.getString("password");
+				}
+				System.out.println("db_password: " + db_password);
+				if(username.equals(db_username) && password.equals(db_password)) {
+					return true;
+				}
+			
+			}catch(Exception e) {
+				e.printStackTrace();
+			}finally {
+				closeAll(conn,pstmt, rs);
+			}
+			return false;
+		}
+	
 	//이메일 중복확인
 	public boolean dup_email(String email) {
 		Connection conn = null;
@@ -147,11 +181,45 @@ public class SchedularDao {
 		return false;
 	}//addMember
 	
+	//priority no 중복확인
+	public boolean dup_pno(String username, int pno, String day) {
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+
+		
+		try {
+			conn=getConnection();
+			String sql = "select * from table_scheduler"
+					+ "			where pno = ? "
+					+ "		    and day = ?"
+					+ "			and username = ?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, pno);
+			pstmt.setString(2, day);
+			pstmt.setString(3,  username);
+			rs = pstmt.executeQuery();
+			int prev_pno = 0;
+			String prev_day = null;
+			while(rs.next()) {
+				prev_pno = rs.getInt("pno");
+				prev_day = rs.getString("day");
+				
+			}
+			if(prev_pno == pno && prev_day.equals(day)) {
+				return true;
+			}
+		}catch(Exception e) {
+			e.printStackTrace();
+		}finally {
+			closeAll(conn, pstmt, rs);
+		}
+		return false;
+	}
 	//회원정보 수정
 		public boolean updateMemberInfo(MemberVo vo) {
 			Connection conn = null;
 			PreparedStatement pstmt = null;
-			System.out.println("vo: " + vo);
 			try {
 				conn = getConnection();
 				String sql = "update table_member set"

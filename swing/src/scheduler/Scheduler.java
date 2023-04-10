@@ -14,6 +14,7 @@ import java.awt.event.ItemListener;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.DefaultRowSorter;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
@@ -23,7 +24,9 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.RowSorter;
 import javax.swing.ScrollPaneConstants;
+import javax.swing.SortOrder;
 import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
@@ -109,22 +112,29 @@ public class Scheduler extends JFrame{
 					deleteData(username);	
 				}else if(obj == btnMypage) {
 					System.out.println("click");
+					Scheduler.this.dispose();
 					new Mypage();
 				}
 			}//action
 
 		
 			private void addData(String username) {
-				task = tfTask.getText();
-				fromTime = tfFrom.getText();
-				toTime = tfTo.getText();
-				SchedulerVo vo = new SchedulerVo(strDay, pno, task, fromTime, toTime, username);
-				boolean result = dao.addData(vo);
-				if(result) {
-					JOptionPane.showMessageDialog(con, "입력성공", "알림", JOptionPane.PLAIN_MESSAGE);
-					showData();
+				boolean isExist_pno = dao.dup_pno(username, pno, strDay);
+				if(isExist_pno == true) {
+					JOptionPane.showMessageDialog(con, "이미 사용한 prioriry no입니다. 다른 priority no를 선택해주세요", 
+													"알림", JOptionPane.PLAIN_MESSAGE);
 				}else {
-					JOptionPane.showMessageDialog(con, "입력실패", "알림", JOptionPane.ERROR_MESSAGE);
+					task = tfTask.getText();
+					fromTime = tfFrom.getText();
+					toTime = tfTo.getText();
+					SchedulerVo vo = new SchedulerVo(strDay, pno, task, fromTime, toTime, username);
+					boolean result = dao.addData(vo);
+					if(result) {
+						JOptionPane.showMessageDialog(con, "입력성공", "알림", JOptionPane.PLAIN_MESSAGE);
+						showData();
+					}else {
+						JOptionPane.showMessageDialog(con, "입력실패", "알림", JOptionPane.ERROR_MESSAGE);
+					}
 				}
 			}//addData
 			private void updateData(String username) {
@@ -277,7 +287,7 @@ public class Scheduler extends JFrame{
 			columnModel.getColumn(4).setCellRenderer(dtcr);
 			
 			//row
-			table.setRowHeight(20);
+			table.setRowHeight(30);
 			TableRowSorter<TableModel> sorter = new TableRowSorter<>(table.getModel());
 			table.setAutoCreateRowSorter(true);
 			sorter.setSortable(0, false);
@@ -291,7 +301,7 @@ public class Scheduler extends JFrame{
 			JScrollPane pane = new JScrollPane(table);
 		    pane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		    pane.setWheelScrollingEnabled(true);
-		    pane.setPreferredSize(new Dimension(900,300));
+		    pane.setPreferredSize(new Dimension(900,250));
 			insets = pnlShow.getInsets();
 			pnlShow.setBounds(insets.left, 180+insets.top, 914, 734);
 			new BorderLayout();
